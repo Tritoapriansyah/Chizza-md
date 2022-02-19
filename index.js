@@ -19,7 +19,7 @@ nocache('./message/ichi.js', module => console.log(`'${module}' Updated!`))
             logger: pino({ level: 'silent' }),
             printQRInTerminal: true,
             auth: state,
-            browser: ['Ichi Base', 'Chrome', '3.0'],
+            browser: ['Lolita Base Login, 'Chrome', '3.0'],
            
             getMessage: async key => {
                 return {
@@ -36,10 +36,14 @@ nocache('./message/ichi.js', module => console.log(`'${module}' Updated!`))
         sock.ev.on('connection.update', (update) => {
             const { connection, lastDisconnect } = update
             if (connection === 'close') {
-               
-                lastDisconnect.error?.output?.statusCode !== DisconnectReason.loggedOut ? startSock() : console.log('connection logged out...')
-            }
-        })
+             startSock()
+             if((lastDisconnect.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut) {
+             } else {
+              console.log('connection closed')
+             }
+             console.log('connection update', update)
+            })
+             
     
         sock.ev.on('creds.update', () => saveState)
         console.log('------------------------------------------------')
